@@ -1,8 +1,7 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: tekton-app-config
-data:
-  NODE_ENV: "staging"
-  LOG_LEVEL: "info"
-  MAX_CONCURRENT_SCANS: "5"
+- op: replace
+  path: /data
+  value:
+    NODE_ENV: "staging"
+    LOG_LEVEL: "info"
+    MAX_CONCURRENT_SCANS: "5"
+    PORT: "3000"

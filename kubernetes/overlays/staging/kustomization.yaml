@@ -19,8 +19,26 @@ images:
     newName: acrtektondev.azurecr.io/tekton-app
     newTag: staging
 
-patches:
-  - path: patch-replicas.yaml
-  - path: patch-resources.yaml
-  - path: patch-configmap.yaml
-  - path: patch-service.yaml
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: tekton-app
+    path: patch-replicas.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: tekton-app
+    path: patch-resources.yaml
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: tekton-app-config
+    path: patch-configmap.yaml
+  - target:
+      version: v1
+      kind: Service
+      name: tekton-app-lb
+    path: patch-service.yaml
