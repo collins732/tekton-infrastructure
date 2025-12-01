@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: tekton-app-prod
+
+namespace: tekton-prod
+
+resources:
+  - ../../base
+
+labels:
+  - pairs:
+      environment: prod
+    includeSelectors: true
+
+images:
+  - name: acrtektondev.azurecr.io/tekton-app
+    newName: acrtektondev.azurecr.io/tekton-app
+    newTag: prod
+
+patches:
+  - path: patch-replicas.yaml
+  - path: patch-resources.yaml
+  - path: patch-configmap.yaml
+  - path: patch-service.yaml

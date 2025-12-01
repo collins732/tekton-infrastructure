@@ -1,0 +1,98 @@
+# -----------------------------------------------------------------------------
+# Network Policies
+# Restrict network traffic for security
+# -----------------------------------------------------------------------------
+
+# Deny all ingress traffic by default
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: tekton
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+---
+# Allow ingress from NGINX Ingress Controller
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-controller
+  namespace: tekton
+  labels:
+    app: tekton-app
+spec:
+  podSelector:
+    matchLabels:
+      app: tekton-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+
+---
+# Allow ingress from same namespace (for internal communication)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: tekton
+  labels:
+    app: tekton-app
+spec:
+  podSelector:
+    matchLabels:
+      app: tekton-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 3000
+
+---
+# Allow egress to DNS, HTTPS, and Azure services
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress
+  namespace: tekton
+  labels:
+    app: tekton-app
+spec:
+  podSelector:
+    matchLabels:
+      app: tekton-app
+  policyTypes:
+    - Egress
+  egress:
+    # DNS
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # HTTPS for external APIs
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 443
+    # HTTP for external APIs (if needed)
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 80

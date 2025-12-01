@@ -1,0 +1,14 @@
+# -----------------------------------------------------------------------------
+# Namespace
+# Isolated namespace for Tekton application
+# -----------------------------------------------------------------------------
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tekton
+  labels:
+    app: tekton-app
+    istio-injection: disabled
+  annotations:
+    description: "Namespace for Tekton vulnerability scanner application"

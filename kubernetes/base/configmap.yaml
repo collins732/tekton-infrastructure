@@ -1,0 +1,25 @@
+# -----------------------------------------------------------------------------
+# ConfigMap
+# Non-sensitive configuration for the application
+# -----------------------------------------------------------------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tekton-app-config
+  namespace: tekton
+  labels:
+    app: tekton-app
+data:
+  # Application settings
+  NODE_ENV: "production"
+  PORT: "3000"
+  LOG_LEVEL: "info"
+
+  # Feature flags
+  ENABLE_METRICS: "true"
+  ENABLE_HEALTHCHECK: "true"
+
+  # API settings
+  API_TIMEOUT: "30000"
+  MAX_CONCURRENT_SCANS: "5"
