@@ -1,0 +1,22 @@
+# -----------------------------------------------------------------------------
+# Patch - Replicas for Dev Environment
+# Minimal replicas for cost efficiency
+# -----------------------------------------------------------------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-app
+  namespace: tekton
+spec:
+  replicas: 1
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tekton-app
+  namespace: tekton
+spec:
+  minReplicas: 1
+  maxReplicas: 2

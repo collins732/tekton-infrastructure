@@ -1,0 +1,22 @@
+# -----------------------------------------------------------------------------
+# Patch - Ingress for Dev Environment
+# Development hostname
+# -----------------------------------------------------------------------------
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tekton-app
+  namespace: tekton
+spec:
+  rules:
+    - host: tekton-dev.francecentral.cloudapp.azure.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tekton-app
+                port:
+                  number: 80
